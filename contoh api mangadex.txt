@@ -1,0 +1,15 @@
+baseUrl: 		https://tv6pyvncy3qb6.apttrvtvrt9zm.mangadex.network/Z4tUQGLpHsi3tQYoU9ZvQZY7BFS5JOJ8tUaP4BWXMl47WG5IX_kt7arke3VrMcv4xW2OBHnx0sBX8ZtGzPxJbGW-RTPxSeGxZG6WPxquVF6UIn4u7Xp_2CN5A9i3mGSReP6rCFLmU_PYm4JH8y_j9OyG5fgQoHEbwo_0MQLdIjUoIfgzkvvkLBD2U72XjYhJ/
+quality-mode: 		data/
+chapter-hash:		e199c7d73af7a58e8a4d0263f03db660/
+chapter-quality-mode:	x1-b765e86d5ecbc932cf3f517a8604f6ac6d8a7f379b0277a117dc7c09c53d041e.png
+
+request baseUrl : 
+https://api.mangadex.org/at-home/server
+chapter.data.id: /f5ec5e4f-2c95-48ca-b3f9-8e9ed6227928
+
+
+request cover art:
+1.) simpan manga id
+2.) simpan cover id
+3.) request cover filename dengan cover id (https://api.mangadex.org/cover/{coverId})
+4.) request cover art dengan manga id dan filename yang telah didapatkan (https://uploads.mangadex.org/covers/{ manga.id }/{ cover.filename })
