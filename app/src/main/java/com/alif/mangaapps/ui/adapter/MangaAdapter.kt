@@ -1,6 +1,7 @@
 package com.alif.mangaapps.ui.adapter
 
 import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,10 +15,11 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.MangaViewHolder>() {
 
     private var listManga = ArrayList<MangaEntity>()
 
-    fun setManga(mangas: ArrayList<MangaEntity>?) {
+    fun setManga(mangas: List<MangaEntity>?) {
         if(mangas == null) return
         listManga.clear()
         listManga.addAll(mangas)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(
@@ -40,6 +42,8 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.MangaViewHolder>() {
             with(binding) {
                 itemTitle.text = manga.title
                 itemDescription.text = manga.desc
+
+                Log.d("Manga cover, ", manga.coverArt)
 
                 Glide.with(itemView.context)
                     .load(manga.coverArt)

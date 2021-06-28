@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alif.mangaapps.R
 import com.alif.mangaapps.databinding.FragmentMangaBinding
 import com.alif.mangaapps.ui.adapter.MangaAdapter
 import com.alif.mangaapps.ui.viewmodel.MangaViewModel
+import com.alif.mangaapps.viewmodel.ViewModelFactory
 
 class MangaFragment : Fragment() {
 
@@ -29,19 +31,21 @@ class MangaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(activity != null) {
-            val viewModel = ViewModelProvider(this).get(MangaViewModel::class.java)
+
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[MangaViewModel::class.java]
 
             val mangaAdapter = MangaAdapter()
-
-            val mangaList = viewModel.getDummyManga()
-
-            mangaAdapter.setManga(mangaList)
 
             with(fragmentMangaBinding.rvManga) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 adapter = mangaAdapter
             }
+
+            viewModel.getManga().observe(viewLifecycleOwner, Observer { mangas ->
+                mangaAdapter.setManga(mangas!!)
+            })
         }
     }
 
