@@ -11,6 +11,9 @@ import com.alif.mangaapps.data.source.remote.response.CoverResponse
 import com.alif.mangaapps.data.source.remote.response.MangaResponse
 import com.alif.mangaapps.data.source.remote.response.ResultsItem
 import com.alif.mangaapps.utils.DataDummy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,26 +32,12 @@ class RemoteDataSource {
         private const val POSTER_URL = "https://uploads.mangadex.org/covers/"
     }
 
-
-    suspend fun getAllMangas(callback: LoadMangaCallback) {
-        ApiConfig.getApiServiceManga().getManga().await().results.let { listManga ->
-            callback.onMangaReceived(listManga)
-        }
-    }
-
-
-    @SuppressLint("LongLogTag")
-    suspend fun getMangaCover(coverId: String, callback: LoadDetailCallback) {
-        ApiConfig.getApiServiceManga().getCoverFile(coverId).await().data.attributes.fileName.let { fileName ->
-            callback.onFileNameReceived(fileName)
-        }
-    }
-
     fun getManga(): LiveData<List<MangaEntity>> {
         val listManga = MutableLiveData<List<MangaEntity>>()
 
         val client = ApiConfig.getApiServiceManga().getManga()
         client.enqueue(object: Callback<MangaResponse> {
+            @SuppressLint("LongLogTag")
             override fun onResponse(call: Call<MangaResponse>, response: Response<MangaResponse>) {
                 if(response.isSuccessful) {
                     val mangas = ArrayList<MangaEntity>()
@@ -60,10 +49,10 @@ class RemoteDataSource {
                             mangaResponse.data.attributes.title.en,
                             mangaResponse.data.attributes.description.en,
                             mangaResponse.data.attributes.publicationDemographic,
-                            DataDummy.getDummyCover()
+                            ""
                         )
                         getCoverArt(manga, mangaResponse.relationships[2].id)
-                        Log.d("Debug coba", manga.coverArt)
+                        Log.d("Debug remoteDataSource getmanga", manga.coverArt)
                         mangas.add(manga)
                     }
                     listManga.postValue(mangas)
@@ -78,16 +67,43 @@ class RemoteDataSource {
         return listManga
     }
 
-    fun getCoverArt(manga: MangaEntity, coverId: String) {
+    fun getMangaDetail(mangaId: String): LiveData<MangaEntity> {
+        val manga = MutableLiveData<MangaEntity>()
+
+        val client = ApiConfig.getApiServiceManga().getMangaDetail(mangaId)
+        client.enqueue(object : Callback<ResultsItem> {
+            override fun onResponse(call: Call<ResultsItem>, response: Response<ResultsItem>) {
+                val result = response.body()!!
+
+                val mangaResponse = MangaEntity(
+                    result.data.id,
+                    result.data.attributes.title.en,
+                    result.data.attributes.description.en,
+                    result.data.attributes.publicationDemographic,
+                    ""
+                )
+                getCoverArt(mangaResponse, result.relationships[2].id)
+                Log.d("Debug remote getdetail", mangaResponse.coverArt!!)
+                Log.d("Debug remote getdetail", "coba")
+                manga.postValue(mangaResponse)
+            }
+
+            override fun onFailure(call: Call<ResultsItem>, t: Throwable) {
+                Log.e("Fail", "onFailure: ${t.message.toString()}")
+            }
+
+        })
+        return manga
+    }
+
+    private fun getCoverArt(manga: MangaEntity, coverId: String){
         val client = ApiConfig.getApiServiceManga().getCoverFile(coverId)
         client.enqueue(object: Callback<CoverResponse> {
+            @SuppressLint("LongLogTag")
             override fun onResponse(call: Call<CoverResponse>, response: Response<CoverResponse>) {
                 if(response.isSuccessful) {
                     val result = response.body()?.data?.attributes?.fileName.toString()
                     manga.coverArt = "${POSTER_URL}${manga.id}/${result}"
-//                    Log.d("Debug coba,", result)
-                } else {
-                    Log.d("Debug coba", "GAGAL")
                 }
             }
 
@@ -98,12 +114,5 @@ class RemoteDataSource {
         })
     }
 
-    interface LoadMangaCallback {
-        fun onMangaReceived(mangaResponse: List<ResultsItem>)
-    }
-
-    interface LoadDetailCallback {
-         fun onFileNameReceived(fileName: String)
-    }
 
 }

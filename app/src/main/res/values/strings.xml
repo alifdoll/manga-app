@@ -11,4 +11,7 @@
     <string name="btn_add_fav">Add To Favorite</string>
     <string name="btn_remove_fav">Remove From Favorite</string>
     <string name="manga_content_desc">Cover art Manga</string>
+    <string name="manga_poster_for_background_desc">Manga Poster for Background</string>
+    <string name="manga_poster_desc">Manga Poster for Detail</string>
+    <string name="description">Description</string>
 </resources>

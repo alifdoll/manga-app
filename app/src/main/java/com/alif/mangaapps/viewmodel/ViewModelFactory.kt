@@ -7,6 +7,7 @@ import com.alif.mangaapps.data.source.DataRepository
 import com.alif.mangaapps.di.Injection
 import com.alif.mangaapps.ui.viewmodel.MangaViewModel
 
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory private constructor(private val dataRepository: DataRepository): ViewModelProvider.NewInstanceFactory(){
 
     companion object {

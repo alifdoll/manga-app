@@ -1,5 +1,6 @@
 package com.alif.mangaapps.ui.adapter
 
+import android.content.Intent
 import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alif.mangaapps.R
 import com.alif.mangaapps.data.entity.MangaEntity
 import com.alif.mangaapps.databinding.ItemBinding
+import com.alif.mangaapps.ui.detail.MangaDetailActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -50,6 +52,12 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.MangaViewHolder>() {
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
                         .error(R.drawable.ic_error))
                     .into(itemCover)
+
+                itemView.setOnClickListener {
+                    val intent = Intent(itemView.context, MangaDetailActivity::class.java)
+                    intent.putExtra(MangaDetailActivity.EXTRA_ID, manga.id)
+                    itemView.context.startActivity(intent)
+                }
             }
 
         }

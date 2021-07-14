@@ -7,6 +7,7 @@ import com.alif.mangaapps.vo.Resource
 
 interface DataSource {
 
-    fun getHalfManga(): LiveData<List<MangaEntity>>
+    fun getManga(): LiveData<List<MangaEntity>>
 
+    fun getMangaDetail(mangaId: String): LiveData<MangaEntity>
 }

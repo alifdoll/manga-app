@@ -10,5 +10,7 @@ class MangaViewModel(private val mangaDataRepository: DataRepository): ViewModel
 
     fun getDummyManga(): ArrayList<MangaEntity> = DataDummy.getDummyManga()
 
-    fun getManga(): LiveData<List<MangaEntity>> = mangaDataRepository.getHalfManga()
+    fun getManga(): LiveData<List<MangaEntity>> = mangaDataRepository.getManga()
+
+    fun getMangaDetail(mangaId: String): LiveData<MangaEntity> = mangaDataRepository.getMangaDetail(mangaId)
 }
