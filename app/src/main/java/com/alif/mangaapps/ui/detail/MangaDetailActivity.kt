@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.alif.mangaapps.R
+import com.alif.mangaapps.data.entity.MangaEntity
 import com.alif.mangaapps.databinding.ActivityMangaDetailBinding
 import com.alif.mangaapps.databinding.ContentDetailBinding
 import com.alif.mangaapps.ui.viewmodel.MangaViewModel
@@ -32,42 +33,32 @@ class MangaDetailActivity : AppCompatActivity() {
         setContentView(activityDetailBinding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val extras = intent.extras
+        val manga = intent.getParcelableExtra<MangaEntity>(EXTRA_ID) as MangaEntity
 
         val factory = ViewModelFactory.getInstance(this)
         val viewModel = ViewModelProvider(this, factory)[MangaViewModel::class.java]
 
-        if(extras != null) {
-            val mangaId = extras.getString(EXTRA_ID)
-            if(mangaId != null) {
-                viewModel.getMangaDetail(mangaId).observe(this, Observer { manga ->
-                    Log.d("Debug detailActivity viewmodel", manga.title)
-                    Log.d("Debug detailActivity viewmodel", manga.coverArt)
-                    contentDetailBinding.detailTitle.text = manga.title
-                    contentDetailBinding.detailDescription.text = manga.desc
+        val mangaId = manga.id
 
-                    if(manga.coverArt == "") {
-                        Log.d("Debug detailActivity viewmodel", "cover null")
-                    } else {
-                        Log.d("Debug detailActivity viewmodel", "cover ada")
-                    }
-                    Glide.with(this)
-                        .load(manga.coverArt)
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
-                            .error(R.drawable.ic_error))
-                        .into(contentDetailBinding.detailPoster)
+        if(mangaId != null) {
 
-                    Glide.with(this)
-                        .load(manga.coverArt)
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
-                            .error(R.drawable.ic_error))
-                        .into(activityDetailBinding.detailPosterBg)
+            contentDetailBinding.detailTitle.text = manga.title
+            contentDetailBinding.detailOverview.text = manga.desc
 
+            Glide.with(this)
+                .load(manga.coverArt)
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
+                    .error(R.drawable.ic_error))
+                .into(contentDetailBinding.detailPoster)
 
-                })
-            } else {
-                Log.d("Debug detailActivity viewmodel", "error")
-            }
+            Glide.with(this)
+                .load(manga.coverArt)
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
+                    .error(R.drawable.ic_error))
+                .into(contentDetailBinding.detailPosterBg)
+
+        } else {
+            Log.d("Debug detailActivity viewmodel", "error")
         }
     }
 }

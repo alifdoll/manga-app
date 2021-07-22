@@ -45,7 +45,7 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.MangaViewHolder>() {
                 itemTitle.text = manga.title
                 itemDescription.text = manga.desc
 
-                Log.d("Manga cover, ", manga.coverArt)
+                Log.d("Manga cover, ", manga.coverArt!!)
 
                 Glide.with(itemView.context)
                     .load(manga.coverArt)
@@ -55,7 +55,7 @@ class MangaAdapter : RecyclerView.Adapter<MangaAdapter.MangaViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, MangaDetailActivity::class.java)
-                    intent.putExtra(MangaDetailActivity.EXTRA_ID, manga.id)
+                    intent.putExtra(MangaDetailActivity.EXTRA_ID, manga)
                     itemView.context.startActivity(intent)
                 }
             }

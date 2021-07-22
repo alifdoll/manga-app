@@ -44,6 +44,7 @@ class MangaFragment : Fragment() {
             }
 
             viewModel.getManga().observe(viewLifecycleOwner, Observer { mangas ->
+                fragmentMangaBinding.progressBar.visibility = View.GONE
                 mangaAdapter.setManga(mangas!!)
             })
         }

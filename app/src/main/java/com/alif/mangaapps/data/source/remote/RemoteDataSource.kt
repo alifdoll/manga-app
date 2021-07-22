@@ -32,6 +32,18 @@ class RemoteDataSource {
         private const val POSTER_URL = "https://uploads.mangadex.org/covers/"
     }
 
+    suspend fun getComic(callback: LoadMangaCallback) {
+        ApiConfig.getApiServiceManga().getManga().await().results.let { mangaResponse ->
+            callback.OnMangaReceived(mangaResponse)
+        }
+    }
+
+    suspend fun getComicArt(coverId: String, callback: LoadMangaCoverCallback) {
+        ApiConfig.getApiServiceManga().getCoverFile(coverId).await().data.attributes.fileName.let { fileName ->
+            callback.OnCoverReceived(fileName)
+        }
+    }
+
     fun getManga(): LiveData<List<MangaEntity>> {
         val listManga = MutableLiveData<List<MangaEntity>>()
 
@@ -52,7 +64,7 @@ class RemoteDataSource {
                             ""
                         )
                         getCoverArt(manga, mangaResponse.relationships[2].id)
-                        Log.d("Debug remoteDataSource getmanga", manga.coverArt)
+                        Log.d("Debug remoteDataSource getmanga", manga.coverArt!!)
                         mangas.add(manga)
                     }
                     listManga.postValue(mangas)
@@ -114,5 +126,13 @@ class RemoteDataSource {
         })
     }
 
+
+    interface LoadMangaCallback {
+        fun OnMangaReceived(mangaResponse: List<ResultsItem>)
+    }
+
+    interface LoadMangaCoverCallback {
+        fun OnCoverReceived(fileName: String)
+    }
 
 }
