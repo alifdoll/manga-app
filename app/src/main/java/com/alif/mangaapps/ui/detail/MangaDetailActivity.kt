@@ -1,6 +1,7 @@
 package com.alif.mangaapps.ui.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import com.alif.mangaapps.R
 import com.alif.mangaapps.data.entity.MangaEntity
 import com.alif.mangaapps.databinding.ActivityMangaDetailBinding
 import com.alif.mangaapps.databinding.ContentDetailBinding
+import com.alif.mangaapps.ui.chapter.ChapterActivity
 import com.alif.mangaapps.ui.viewmodel.MangaViewModel
 import com.alif.mangaapps.viewmodel.ViewModelFactory
 import com.bumptech.glide.Glide
@@ -35,8 +37,6 @@ class MangaDetailActivity : AppCompatActivity() {
 
         val manga = intent.getParcelableExtra<MangaEntity>(EXTRA_ID) as MangaEntity
 
-        val factory = ViewModelFactory.getInstance(this)
-        val viewModel = ViewModelProvider(this, factory)[MangaViewModel::class.java]
 
         val mangaId = manga.id
 
@@ -44,6 +44,8 @@ class MangaDetailActivity : AppCompatActivity() {
 
             contentDetailBinding.detailTitle.text = manga.title
             contentDetailBinding.detailOverview.text = manga.desc
+
+
 
             Glide.with(this)
                 .load(manga.coverArt)
@@ -56,6 +58,12 @@ class MangaDetailActivity : AppCompatActivity() {
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_load)
                     .error(R.drawable.ic_error))
                 .into(contentDetailBinding.detailPosterBg)
+
+            contentDetailBinding.buttonRead.setOnClickListener {
+                val intent = Intent(this@MangaDetailActivity, ChapterActivity::class.java)
+                intent.putExtra(ChapterActivity.EXTRA_ID, manga.id)
+                this.startActivity(intent)
+            }
 
         } else {
             Log.d("Debug detailActivity viewmodel", "error")

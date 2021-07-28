@@ -2,6 +2,7 @@ package com.alif.mangaapps.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.alif.mangaapps.data.entity.ChapterEntity
 import com.alif.mangaapps.data.entity.MangaEntity
 import com.alif.mangaapps.data.source.DataRepository
 import com.alif.mangaapps.utils.DataDummy
@@ -12,5 +13,5 @@ class MangaViewModel(private val mangaDataRepository: DataRepository): ViewModel
 
     fun getManga(): LiveData<List<MangaEntity>> = mangaDataRepository.getManga()
 
-    fun getMangaDetail(mangaId: String): LiveData<MangaEntity> = mangaDataRepository.getMangaDetail(mangaId)
+    fun getChapter(mangaId: String): LiveData<List<ChapterEntity>> = mangaDataRepository.getChapter(mangaId)
 }

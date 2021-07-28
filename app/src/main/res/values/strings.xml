@@ -14,4 +14,5 @@
     <string name="manga_poster_for_background_desc">Manga Poster for Background</string>
     <string name="manga_poster_desc">Manga Poster for Detail</string>
     <string name="description">Description</string>
+    <string name="button_read_manga">Read Manga</string>
 </resources>

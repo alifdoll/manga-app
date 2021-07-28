@@ -2,8 +2,10 @@ package com.alif.mangaapps.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.alif.mangaapps.data.entity.ChapterEntity
 import com.alif.mangaapps.data.entity.MangaEntity
 import com.alif.mangaapps.data.source.remote.RemoteDataSource
+import com.alif.mangaapps.data.source.remote.response.ChapterItems
 import com.alif.mangaapps.data.source.remote.response.ResultsItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -70,8 +72,30 @@ class DataRepository private constructor(
         return listManga
     }
 
-    override fun getMangaDetail(mangaId: String): LiveData<MangaEntity> {
-        return remoteDataSource.getMangaDetail(mangaId)
+    override fun getChapter(mangaId: String): LiveData<List<ChapterEntity>> {
+        val listChapter = MutableLiveData<List<ChapterEntity>>()
+
+        CoroutineScope(IO).launch {
+            remoteDataSource.getChapter(mangaId, object : RemoteDataSource.LoadChapterCallback {
+                override fun OnChapterReceived(chapterResponse: List<ChapterItems>) {
+                    val chapters = ArrayList<ChapterEntity>()
+
+                    for (chapter in chapterResponse) {
+                        val ch = ChapterEntity(
+                            chapter.data.id,
+                            chapter.data.attributes.chapter,
+                            chapter.data.attributes.title
+                        )
+
+                        chapters.add(ch)
+                    }
+
+                    listChapter.postValue(chapters)
+                }
+
+            })
+        }
+        return listChapter
     }
 
 

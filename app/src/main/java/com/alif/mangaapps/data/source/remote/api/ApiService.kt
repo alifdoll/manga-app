@@ -1,6 +1,7 @@
 package com.alif.mangaapps.data.source.remote.api
 
 import com.alif.mangaapps.data.entity.MangaEntity
+import com.alif.mangaapps.data.source.remote.response.ChapterResponse
 import com.alif.mangaapps.data.source.remote.response.CoverResponse
 import com.alif.mangaapps.data.source.remote.response.MangaResponse
 import com.alif.mangaapps.data.source.remote.response.ResultsItem
@@ -24,6 +25,10 @@ interface ApiService {
         @Path("coverId") coverId: String
     ): Call<CoverResponse>
 
+    @GET("manga/{mangaId}/feed?translatedLanguage[]=en&order[chapter]=asc")
+    fun getChapter(
+        @Path("mangaId") mangaId: String
+    ): Call<ChapterResponse>
 
 
 }
