@@ -10,5 +10,7 @@ interface DataSource {
 
     fun getManga(): LiveData<List<MangaEntity>>
 
-    fun getChapter(mangaId: String): LiveData<List<ChapterEntity>>
+    fun getChapterList(mangaId: String): LiveData<List<ChapterEntity>>
+
+    fun getChapterPages(chapterid: String): LiveData<List<String>>
 }

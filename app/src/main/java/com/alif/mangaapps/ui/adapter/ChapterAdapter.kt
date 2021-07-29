@@ -1,6 +1,7 @@
 package com.alif.mangaapps.ui.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.alif.mangaapps.data.entity.ChapterEntity
 import com.alif.mangaapps.databinding.ItemChapterBinding
+import com.alif.mangaapps.ui.pages.PagesActivity
 
 class ChapterAdapter : RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
 
@@ -39,6 +41,12 @@ class ChapterAdapter : RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() 
             with(binding) {
                 chapterNumber.text = chapter.number
                 chapterTitle.text = chapter.title
+
+                itemView.setOnClickListener {
+                    val intent = Intent(itemView.context, PagesActivity::class.java)
+                    intent.putExtra(PagesActivity.EXTRA_ID, chapter.id)
+                    itemView.context.startActivity(intent)
+                }
 
                 Log.d("ChapterAdapter, number title", "${chapter.number}, ${chapter.title}")
             }

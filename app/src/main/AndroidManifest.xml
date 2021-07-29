@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MangaApps">
-        <activity android:name=".ui.chapter.ChapterActivity"></activity>
+        <activity android:name=".ui.pages.PagesActivity"></activity>
+        <activity android:name=".ui.chapter.ChapterActivity" />
         <activity android:name=".ui.detail.MangaDetailActivity" />
         <activity
             android:name=".ui.home.HomeActivity"

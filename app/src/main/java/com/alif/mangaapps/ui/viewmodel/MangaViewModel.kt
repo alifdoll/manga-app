@@ -13,5 +13,7 @@ class MangaViewModel(private val mangaDataRepository: DataRepository): ViewModel
 
     fun getManga(): LiveData<List<MangaEntity>> = mangaDataRepository.getManga()
 
-    fun getChapter(mangaId: String): LiveData<List<ChapterEntity>> = mangaDataRepository.getChapter(mangaId)
+    fun getChapter(mangaId: String): LiveData<List<ChapterEntity>> = mangaDataRepository.getChapterList(mangaId)
+
+    fun getChapterPages(chapterId: String): LiveData<List<String>> = mangaDataRepository.getChapterPages(chapterId)
 }
